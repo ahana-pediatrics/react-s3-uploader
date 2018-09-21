@@ -7,6 +7,7 @@ type RefObject<T> = {
 };
 
 type Props = {
+  capture: boolean,
   signingUrl: string,
   getSignedUrl: () => *,
   preprocess: (File, (File) => *) => *,
@@ -35,6 +36,7 @@ type State = {
 
 class ReactS3Uploader extends React.Component<Props, State> {
   static defaultProps = {
+    capture: false,
     preprocess(file: File, next: File => *) {
       console.log(`Pre-process: ${file.name}`);
       next(file);
@@ -128,11 +130,13 @@ class ReactS3Uploader extends React.Component<Props, State> {
   myUploader: ?S3Upload;
 
   render() {
+    const {capture} = this.props;
     const {value} = this.state;
     return (
       <input
         {...this.getInputProps()}
         ref={this.fileElement}
+        accept={`image/*${capture ? ';capture=camera' : ''}`}
         type="file"
         onChange={this.onChange}
         value={value}

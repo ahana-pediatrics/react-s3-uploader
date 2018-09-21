@@ -1,2 +1,3 @@
+import ReactS3Uploader from './ReactS3Uploader';
 
-module.exports = require('./ReactS3Uploader');
+export default ReactS3Uploader;

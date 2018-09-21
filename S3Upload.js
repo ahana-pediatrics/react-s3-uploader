@@ -7,7 +7,7 @@ export type SigningResult = {
   headers: {[string]: string},
 };
 
-class S3Upload {
+export default class S3Uploader {
   contentDisposition: string = '';
 
   server: string = '';
@@ -237,5 +237,3 @@ class S3Upload {
     if (this.httprequest) this.httprequest.abort();
   };
 }
-
-export default S3Upload;
