@@ -7,25 +7,37 @@ type RefObject<T> = {
 };
 
 type Props = {
+  /**
+   * If set, selected files are automatically uploaded to S3
+   */
+  autoUpload?: boolean,
+  /**
+   * If set, the input can access mobile devices' camera (if supported by the browser)
+   */
   capture?: boolean,
-  signingUrl?: string,
+  contentDisposition?: string,
   getSignedUrl?: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
-  preprocess?: (File, (File) => *) => *,
-  onSignedUrl?: (*) => void,
-  onProgress?: (number, string, File) => void,
-  onFinish?: SigningResult => void,
+  onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
   onError?: string => void,
-  signingUrlMethod?: string,
+  onFinish?: SigningResult => void,
+  /**
+   * Called periodically as a file uploads
+   * @param <number> Percentage complete
+   * @param <string> Any messages, e.g. Waiting, Uploading, Finalizing, Upload completed
+   * @param <File> File that is being uploaded
+   */
+  onProgress?: (number, string, File) => void,
+  onSignedUrl?: (*) => void,
+  preprocess?: (File, (File) => *) => *,
+  scrubFilename?: string => void,
+  server?: string,
+  signingUrl?: string,
   signingUrlHeaders?: ?{} | ((*) => {[string]: *}),
+  signingUrlMethod?: string,
   signingUrlQueryParams?: ?{} | ((*) => {[string]: *}),
   signingUrlWithCredentials?: boolean,
-  uploadRequestHeaders?: {},
-  onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
-  contentDisposition?: string,
-  server?: string,
-  scrubFilename?: string => void,
   s3path?: string,
-  autoUpload?: boolean,
+  uploadRequestHeaders?: {},
 };
 
 type State = {
@@ -35,6 +47,7 @@ type State = {
 export default class ReactS3Uploader extends React.Component<Props, State> {
   static defaultProps = {
     capture: false,
+    getSignedUrl: null,
     preprocess(file: File, next: File => *) {
       console.log(`Pre-process: ${file.name}`);
       next(file);
@@ -46,7 +59,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
       console.log(`Upload progress: ${percent}% ${message}`);
     },
     onFinish(signResult: SigningResult) {
-      console.log(`Upload finished: ${signResult.publicUrl}`);
+      console.log(`Upload finished`, signResult);
     },
     onError(message: string) {
       console.log(`Upload error: ${message}`);
