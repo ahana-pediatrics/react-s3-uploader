@@ -7,34 +7,32 @@ type RefObject<T> = {
 };
 
 type Props = {
-  capture: boolean,
+  capture?: boolean,
   signingUrl: string,
-  getSignedUrl: () => *,
+  getSignedUrl: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
   preprocess: (File, (File) => *) => *,
   onSignedUrl: (*) => void,
-  onProgress: (number, string, File) => void,
-  onFinish: SigningResult => void,
-  onFinishS3Put: (*) => *,
-  onError: string => void,
-  signingUrlMethod: string,
-  signingUrlHeaders: ?{} | ((*) => {[string]: *}),
-  signingUrlQueryParams: ?{} | ((*) => {[string]: *}),
-  signingUrlWithCredentials: boolean,
-  uploadRequestHeaders: {},
+  onProgress?: (number, string, File) => void,
+  onFinish?: SigningResult => void,
+  onError?: string => void,
+  signingUrlMethod?: string,
+  signingUrlHeaders?: ?{} | ((*) => {[string]: *}),
+  signingUrlQueryParams?: ?{} | ((*) => {[string]: *}),
+  signingUrlWithCredentials?: boolean,
+  uploadRequestHeaders?: {},
   onChange: (SyntheticInputEvent<HTMLInputElement>) => *,
-  contentDisposition: string,
-  server: string,
-  scrubFilename: string => void,
-  s3path: string,
-  inputRef: (*) => void,
-  autoUpload: boolean,
+  contentDisposition?: string,
+  server?: string,
+  scrubFilename?: string => void,
+  s3path?: string,
+  autoUpload?: boolean,
 };
 
 type State = {
   value: string,
 };
 
-class ReactS3Uploader extends React.Component<Props, State> {
+export default class ReactS3Uploader extends React.Component<Props, State> {
   static defaultProps = {
     capture: false,
     preprocess(file: File, next: File => *) {
@@ -62,18 +60,25 @@ class ReactS3Uploader extends React.Component<Props, State> {
     autoUpload: true,
   };
 
+  state = {
+    value: '',
+  };
+
   fileElement: RefObject<HTMLInputElement> = React.createRef();
 
-  onChange(e: SyntheticInputEvent<HTMLInputElement>) {
+  onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     const {autoUpload, onChange} = this.props;
     this.setState({value: e.target.value});
     if (autoUpload) {
+      this.uploadFile();
+    }
+    if (onChange) {
       onChange(e);
     }
-  }
+  };
 
   getInputProps = () => {
-    const invalidProps = Object.keys(ReactS3Uploader);
+    const invalidProps = Object.keys(ReactS3Uploader.defaultProps);
 
     return Object.entries(this.props).reduce((propsList, [key, value]) => {
       if (invalidProps.includes(key)) {
@@ -94,7 +99,7 @@ class ReactS3Uploader extends React.Component<Props, State> {
       preprocess,
       onSignedUrl,
       onProgress,
-      onFinishS3Put,
+      onFinish,
       onError,
       signingUrlMethod,
       signingUrlHeaders,
@@ -106,6 +111,7 @@ class ReactS3Uploader extends React.Component<Props, State> {
       scrubFilename,
       s3path,
     } = this.props;
+
     this.myUploader = new S3Upload({
       fileElement: this.fileElement.current,
       signingUrl,
@@ -113,7 +119,7 @@ class ReactS3Uploader extends React.Component<Props, State> {
       preprocess,
       onSignedUrl,
       onProgress,
-      onFinishS3Put,
+      onFinishS3Put: onFinish,
       onError,
       signingUrlMethod,
       signingUrlHeaders,
@@ -144,5 +150,3 @@ class ReactS3Uploader extends React.Component<Props, State> {
     );
   }
 }
-
-module.exports = ReactS3Uploader;
