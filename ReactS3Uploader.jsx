@@ -8,10 +8,10 @@ type RefObject<T> = {
 
 type Props = {
   capture?: boolean,
-  signingUrl: string,
-  getSignedUrl: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
-  preprocess: (File, (File) => *) => *,
-  onSignedUrl: (*) => void,
+  signingUrl?: string,
+  getSignedUrl?: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
+  preprocess?: (File, (File) => *) => *,
+  onSignedUrl?: (*) => void,
   onProgress?: (number, string, File) => void,
   onFinish?: SigningResult => void,
   onError?: string => void,
@@ -20,7 +20,7 @@ type Props = {
   signingUrlQueryParams?: ?{} | ((*) => {[string]: *}),
   signingUrlWithCredentials?: boolean,
   uploadRequestHeaders?: {},
-  onChange: (SyntheticInputEvent<HTMLInputElement>) => *,
+  onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
   contentDisposition?: string,
   server?: string,
   scrubFilename?: string => void,
