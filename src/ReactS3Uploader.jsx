@@ -20,7 +20,7 @@ type Props = {
   getSignedUrl?: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
   onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
   onError?: string => void,
-  onFinish?: SigningResult => void,
+  onFinish?: (SigningResult, File) => void,
   /**
    * Called periodically as a file uploads
    * @param <number> Percentage complete
