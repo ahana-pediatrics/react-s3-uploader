@@ -52,7 +52,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
     getSignedUrl: null,
     isInline(fileType: string) {
       return fileType.substr(0, 6) === 'image/';
-    }
+    },
     preprocess(file: File, next: File => *) {
       console.log(`Pre-process: ${file.name}`);
       next(file);
