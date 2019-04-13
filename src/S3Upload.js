@@ -10,6 +10,8 @@ export type SigningResult = {
 export default class S3Uploader {
   contentDisposition: string = '';
 
+  isInline: (fileType: string) => boolean;
+
   server: string = '';
 
   signingUrl: string = '/sign-s3';
@@ -191,7 +193,7 @@ export default class S3Uploader {
     if (this.contentDisposition) {
       let disposition = this.contentDisposition;
       if (disposition === 'auto') {
-        if (file.type.substr(0, 6) === 'image/') {
+        if (this.isInline(file.type)) {
           disposition = 'inline';
         } else {
           disposition = 'attachment';

@@ -17,6 +17,7 @@ type Props = {
    */
   capture?: boolean,
   contentDisposition?: string,
+  isInline?: (fileType: string) => boolean,
   getSignedUrl?: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
   onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
   onError?: string => void,
@@ -49,6 +50,9 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
   static defaultProps = {
     capture: false,
     getSignedUrl: null,
+    isInline(fileType: string) {
+      return fileType.substr(0, 6) === 'image/';
+    }
     preprocess(file: File, next: File => *) {
       console.log(`Pre-process: ${file.name}`);
       next(file);
@@ -110,6 +114,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
     const {
       signingUrl,
       getSignedUrl,
+      isInline,
       preprocess,
       onSignedUrl,
       onProgress,
@@ -130,6 +135,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
       fileElement: this.fileElement.current,
       signingUrl,
       getSignedUrl,
+      isInline,
       preprocess,
       onSignedUrl,
       onProgress,
