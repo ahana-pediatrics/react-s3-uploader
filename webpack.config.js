@@ -28,22 +28,12 @@ module.exports = {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        use: {
+
           loader: 'babel-loader',
           options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  targets: {
-                    browsers: 'last 2 versions',
-                  },
-                },
-              ],
-            ],
+            presets: ['@babel/preset-env'],
             plugins: ['@babel/plugin-proposal-class-properties'],
-          },
-        },
+          }
       },
     ],
   },

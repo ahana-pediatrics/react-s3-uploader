@@ -1,6 +1,3 @@
-// @flow
-/* eslint-disable react/no-this-in-sfc */
-
 export type SigningResult = {
   publicUrl: string,
   signedUrl: string,
@@ -20,9 +17,9 @@ export class S3Uploader {
 
   s3path: string = '';
 
-  signingUrlQueryParams?: {} | (() => {[key: string]: string});
+  signingUrlQueryParams?: {[key: string]: string} | (() => {[key: string]: string});
 
-  signingUrlHeaders?: {} | (() => {[key: string]: string});
+  signingUrlHeaders?: {[key: string]: string} | (() => {[key: string]: string});
 
   successResponses: Array<number> = [200, 201];
 
@@ -37,7 +34,9 @@ export class S3Uploader {
   signingUrlWithCredentials: boolean;
 
   constructor(options: Partial<S3Uploader> = {}) {
-    Object.assign(this, options);
+    Object.entries(options).forEach( ([key, value]) => {
+      this[key] = value;
+    });
 
     let files = new FileList();
     if(this.fileElement && this.fileElement.files) {
@@ -73,7 +72,7 @@ export class S3Uploader {
 
   handleFileSelect = (files?: FileList) => {
     if(!files) {
-      return [];
+      return;
     }
     const result: ({} |void)[] = [];
     [].forEach.call(files, (file: File) => {
@@ -89,7 +88,7 @@ export class S3Uploader {
   createCORSRequest = (method: string, url: string, opts: {[opt: string]: any} = {}): XMLHttpRequest | null => {
     let xhr = new XMLHttpRequest();
 
-    if (xhr.withCredentials != null) {
+    if ('withCredentials' in xhr) {
       xhr.open(method, url, true);
       if (opts.withCredentials != null) {
         xhr.withCredentials = opts.withCredentials;
@@ -131,10 +130,10 @@ export class S3Uploader {
     }
 
     if (this.signingUrlHeaders) {
-      const signingUrlHeaders =
-        typeof this.signingUrlHeaders === 'function'
-          ? this.signingUrlHeaders()
-          : this.signingUrlHeaders;
+      let signingUrlHeaders =this.signingUrlHeaders;
+        if (typeof this.signingUrlHeaders === 'function') {
+          signingUrlHeaders = this.signingUrlHeaders();
+        }
       Object.keys(signingUrlHeaders).forEach(key => {
         const val = signingUrlHeaders[key];
         xhr.setRequestHeader(key, val);

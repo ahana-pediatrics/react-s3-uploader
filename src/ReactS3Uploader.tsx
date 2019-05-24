@@ -1,7 +1,6 @@
-import * as React from 'react';
-import {SigningResult} from './S3Uploader';
-import {S3Uploader} from './S3Uploader';
-import {ChangeEventHandler} from "react";
+import * as React from "react";
+import {Component, ChangeEventHandler, createRef} from 'react';
+import {SigningResult, S3Uploader} from './S3Uploader';
 
 type RefObject<T> = {
   current: T | null,
@@ -46,7 +45,7 @@ type State = {
   value: string,
 };
 
-export default class ReactS3Uploader extends React.Component<Props, State> {
+export default class ReactS3Uploader extends Component<Props, State> {
   static defaultProps = {
     capture: false,
     getSignedUrl: null,
@@ -82,7 +81,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
     value: '',
   };
 
-  fileElement: RefObject<HTMLInputElement> = React.createRef();
+  fileElement: RefObject<HTMLInputElement> = createRef();
 
   onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {autoUpload, onChange} = this.props;
