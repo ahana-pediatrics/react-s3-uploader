@@ -1,6 +1,6 @@
 {
   "name": "@ohanapediatrics/react-s3-uploader",
-  "version": "7.1.0",
+  "version": "7.2.0",
   "description": "React component that renders a file input and automatically uploads to an S3 bucket",
   "main": "dist/main.js",
   "scripts": {
