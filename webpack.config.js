@@ -2,9 +2,9 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,23 +16,17 @@ module.exports = {
   },
   externals: {
     // Don't bundle react or react-dom
-    react: {
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'React',
-      root: 'React',
-    },
-    'react-dom': {
-      commonjs: 'react-dom',
-      commonjs2: 'react-dom',
-      amd: 'ReactDOM',
-      root: 'ReactDOM',
-    },
+    react: 'React',
+    'react-dom': 'ReactDOM'
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+      },
+      {
+        test: /\.js?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -46,8 +40,6 @@ module.exports = {
                   },
                 },
               ],
-              '@babel/preset-react',
-              '@babel/preset-flow',
             ],
             plugins: ['@babel/plugin-proposal-class-properties'],
           },

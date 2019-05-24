@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json.schemastore.org/tslint",
+  "rules": {
+    "no-unused-variable": false,
+    "adjacent-overload-signatures": true,
+    "prefer-for-of": true,
+    "unified-signatures": true,
+    "no-any": true,
+    "label-position": true,
+    "no-arg": true,
+    "no-construct": true,
+    "no-invalid-this": true,
+    "no-misused-new": true,
+    "no-shadowed-variable": true,
+    "no-string-throw": true,
+    "no-var-keyword": true,
+    "triple-equals": [
+      true,
+      "allow-null-check",
+      "allow-undefined-check"
+    ]
+  },
+  "linterOptions": {
+    "exclude": [
+      "**/*.json",
+      "**/migrations/*.ts"
+    ]
+  }
+}

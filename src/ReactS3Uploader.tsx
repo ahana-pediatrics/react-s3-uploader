@@ -1,7 +1,7 @@
-// @flow
 import * as React from 'react';
-import type SigningResult from './S3Upload';
-import S3Upload from './S3Upload';
+import {SigningResult} from './S3Uploader';
+import {S3Uploader} from './S3Uploader';
+import {ChangeEventHandler} from "react";
 
 type RefObject<T> = {
   current: T | null,
@@ -18,25 +18,25 @@ type Props = {
   capture?: boolean,
   contentDisposition?: string,
   isInline?: (fileType: string) => boolean,
-  getSignedUrl?: (file: File, uploadToS3Callback: (SigningResult) => *) => *,
-  onChange?: (SyntheticInputEvent<HTMLInputElement>) => *,
-  onError?: string => void,
-  onFinish?: (SigningResult, File) => void,
+  getSignedUrl?: (file: File, uploadToS3Callback: (result: SigningResult) => {}) => {},
+  onChange?: ChangeEventHandler<HTMLInputElement>,
+  onError?: (error: string) => void,
+  onFinish?: (result: SigningResult, file: File) => void,
   /**
    * Called periodically as a file uploads
    * @param <number> Percentage complete
    * @param <string> Any messages, e.g. Waiting, Uploading, Finalizing, Upload completed
    * @param <File> File that is being uploaded
    */
-  onProgress?: (number, string, File) => void,
-  onSignedUrl?: (*) => void,
-  preprocess?: (File, (File) => *) => *,
-  scrubFilename?: string => void,
-  server?: string,
-  signingUrl?: string,
-  signingUrlHeaders?: ?{} | ((*) => {[string]: *}),
-  signingUrlMethod?: string,
-  signingUrlQueryParams?: ?{} | ((*) => {[string]: *}),
+  onProgress: (progress: number, message: string, file: File) => void,
+  onSignedUrl: () => void,
+  preprocess: (file: File, handler: (file: File) => {}) => {},
+  scrubFilename: (s:string) => string,
+  server: string,
+  signingUrl: string,
+  signingUrlHeaders: {} | (() => {[key: string]: string}),
+  signingUrlMethod: string,
+  signingUrlQueryParams: {} | (() => {[key: string]: string}),
   signingUrlWithCredentials?: boolean,
   s3path?: string,
   uploadRequestHeaders?: {},
@@ -53,7 +53,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
     isInline(fileType: string) {
       return fileType.substr(0, 6) === 'image/';
     },
-    preprocess(file: File, next: File => *) {
+    preprocess(file: File, next:(file: File) => void) {
       console.log(`Pre-process: ${file.name}`);
       next(file);
     },
@@ -84,7 +84,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
 
   fileElement: RefObject<HTMLInputElement> = React.createRef();
 
-  onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {autoUpload, onChange} = this.props;
     this.setState({value: e.target.value});
     if (autoUpload) {
@@ -131,8 +131,8 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
       s3path,
     } = this.props;
 
-    this.myUploader = new S3Upload({
-      fileElement: this.fileElement.current,
+    this.myUploader = new S3Uploader({
+      fileElement: this.fileElement.current!,
       signingUrl,
       getSignedUrl,
       isInline,
@@ -153,7 +153,7 @@ export default class ReactS3Uploader extends React.Component<Props, State> {
     });
   };
 
-  myUploader: ?S3Upload;
+  myUploader?: S3Uploader;
 
   render() {
     const {capture} = this.props;

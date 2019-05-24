@@ -4,10 +4,10 @@
 export type SigningResult = {
   publicUrl: string,
   signedUrl: string,
-  headers: {[string]: string},
+  headers: {[header: string]: string},
 };
 
-export default class S3Uploader {
+export class S3Uploader {
   contentDisposition: string = '';
 
   isInline: (fileType: string) => boolean;
@@ -20,35 +20,39 @@ export default class S3Uploader {
 
   s3path: string = '';
 
-  signingUrlQueryParams: ?{} | ((*) => {[string]: *}) = null;
+  signingUrlQueryParams?: {} | (() => {[key: string]: string});
 
-  signingUrlHeaders: ?{} | ((*) => {[string]: *}) = null;
+  signingUrlHeaders?: {} | (() => {[key: string]: string});
 
   successResponses: Array<number> = [200, 201];
 
-  uploadRequestHeaders: ?{[string]: string};
+  uploadRequestHeaders?: {[key: string]: string};
 
-  fileElement = null;
+  fileElement?: HTMLInputElement;
 
-  files: ?FileList = null;
+  files?: FileList;
 
-  httprequest: ?XMLHttpRequest = null;
+  httprequest?: XMLHttpRequest;
 
   signingUrlWithCredentials: boolean;
 
-  constructor(options: {[string]: *} = {}) {
+  constructor(options: Partial<S3Uploader> = {}) {
     Object.assign(this, options);
 
-    const files = this.fileElement
-      ? this.fileElement.files
-      : this.files || new FileList();
+    let files = new FileList();
+    if(this.fileElement && this.fileElement.files) {
+      files = this.fileElement.files;
+    } else if(this.files) {
+      files = this.files;
+    }
+
     this.handleFileSelect(files);
   }
 
   onFinishS3Put = (signResult: SigningResult, file: File) =>
     console.log('base.onFinishS3Put()', signResult.publicUrl, file.name);
 
-  preprocess = (file: File, next: File => *) => {
+  preprocess = (file: File, next: (f: File) => {}) => {
     console.log('base.preprocess()', file);
     return next(file);
   };
@@ -63,23 +67,26 @@ export default class S3Uploader {
     console.log('base.onSignedUrl()', result);
   };
 
-  getSignedUrl: (file: File, uploadToS3Callback: (SigningResult) => *) => *;
+  getSignedUrl: (file: File, uploadToS3Callback: (result: SigningResult) => {}) => {};
 
   scrubFilename = (filename: string) => filename.replace(/[^\w\d_\-.]+/gi, '');
 
-  handleFileSelect = (files: FileList) => {
-    const result = [];
-    for (let i = 0; i < files.length; i += 1) {
-      const file = files[i];
+  handleFileSelect = (files?: FileList) => {
+    if(!files) {
+      return [];
+    }
+    const result: ({} |void)[] = [];
+    [].forEach.call(files, (file: File) => {
       this.preprocess(file, processedFile => {
         this.onProgress(0, 'Waiting', processedFile);
         result.push(this.uploadFile(processedFile));
         return result;
       });
-    }
+    })
   };
 
-  createCORSRequest = (method: string, url: string, opts: {[string]: *} = {}) => {
+  // tslint:disable-next-line:no-any
+  createCORSRequest = (method: string, url: string, opts: {[opt: string]: any} = {}): XMLHttpRequest | null => {
     let xhr = new XMLHttpRequest();
 
     if (xhr.withCredentials != null) {
@@ -88,12 +95,13 @@ export default class S3Uploader {
         xhr.withCredentials = opts.withCredentials;
       }
     } else {
-      xhr = null;
+      return null;
     }
     return xhr;
   };
 
-  executeOnSignedUrl = (file: File, callback: (*) => *) => {
+  // tslint:disable-next-line:no-any
+  executeOnSignedUrl = (file: File, callback: ({}) => any):void => {
     const fileName = this.scrubFilename(file.name);
     let queryString = `?objectName=${fileName}&contentType=${encodeURIComponent(
       file.type
@@ -119,7 +127,7 @@ export default class S3Uploader {
 
     if (!xhr) {
       this.onError('CORS not supported', file);
-      return null;
+      return;
     }
 
     if (this.signingUrlHeaders) {
