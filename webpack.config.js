@@ -5,6 +5,10 @@ module.exports = {
   entry: './src/index.ts',
   resolve: {
     extensions: ['.ts', '.tsx'],
+    alias: {
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+    }
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -36,14 +40,14 @@ module.exports = {
         loader: 'ts-loader',
       },
       {
-        test: /\.js?$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
 
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-class-properties'],
-          }
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env'],
+          plugins: ['@babel/plugin-proposal-class-properties'],
+        }
       },
     ],
   },

@@ -9,6 +9,9 @@
     "build": "webpack",
     "prepublish": "rm -rf ./dist && npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "browserslist": [
     "last 1 version",
     "> 0.5% in US",
