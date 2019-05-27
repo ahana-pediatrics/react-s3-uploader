@@ -38,7 +38,7 @@ export class S3Uploader {
       this[key] = value;
     });
 
-    let files = new FileList();
+    let files: FileList | undefined;
     if(this.fileElement && this.fileElement.files) {
       files = this.fileElement.files;
     } else if(this.files) {
