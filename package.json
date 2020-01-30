@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:odysseyscience/react-s3-uploader.git"
+    "url": "git@github.com:ahanapediatrics/react-s3-uploader.git"
   },
   "keywords": [
     "react",
@@ -30,15 +30,18 @@
     "s3",
     "bucket"
   ],
-  "author": "Sean Adkinson",
+  "contributors": [
+    "Sean Adkinson",
+    "Dan Rumney <dan.rumney@ahanapediatrics.com>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/odysseyscience/react-s3-uploader/issues"
+    "url": "https://github.com/ahanapediatrics/react-s3-uploader/issues"
   },
-  "homepage": "https://github.com/odysseyscience/react-s3-uploader",
+  "homepage": "https://github.com/ahanapediatrics/react-s3-uploader",
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">=16.8.6",
+    "react-dom": ">=16.8.6"
   },
   "dependencies": {},
   "devDependencies": {
@@ -50,8 +53,8 @@
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.2",
     "prettier": "^1.14.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": ">=16.8.6",
+    "react-dom": ">=16.8.6",
     "ts-loader": "^6.0.1",
     "tslint": "^6.0.0",
     "typescript": "^3.4.5",

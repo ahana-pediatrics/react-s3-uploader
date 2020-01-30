@@ -6,9 +6,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx'],
     alias: {
-      'react': path.resolve(__dirname, './node_modules/react'),
+      react: path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-    }
+    },
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,17 +21,17 @@ module.exports = {
   externals: {
     // Don't bundle react or react-dom
     react: {
-             commonjs: 'react',
-         commonjs2: 'react',
-         amd: 'React',
-         root: 'React'
-     },
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React',
+    },
     'react-dom': {
       commonjs: 'react-dom',
       commonjs2: 'react-dom',
       amd: 'ReactDOM',
-      root: 'ReactDOM'
-    }
+      root: 'ReactDOM',
+    },
   },
   module: {
     rules: [
@@ -47,7 +47,7 @@ module.exports = {
         options: {
           presets: ['@babel/preset-env'],
           plugins: ['@babel/plugin-proposal-class-properties'],
-        }
+        },
       },
     ],
   },
