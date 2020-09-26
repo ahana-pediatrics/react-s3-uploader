@@ -1,8 +1,8 @@
 {
-  "name": "@ohanapediatrics/react-s3-uploader",
+  "name": "@ahana-pediatrics/react-s3-uploader",
   "version": "7.4.0",
   "description": "React component that renders a file input and automatically uploads to an S3 bucket",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tslint --project .",
@@ -19,10 +19,7 @@
     "safari >= 10",
     "not dead"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ahanapediatrics/react-s3-uploader.git"
-  },
+  "repository": "github:ahanapediatrics/react-s3-uploader",
   "keywords": [
     "react",
     "upload",

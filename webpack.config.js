@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: 'index.js',
     library: 'react-s3-uploader',
     libraryTarget: 'umd',
     publicPath: '/dist/',
