@@ -19,7 +19,7 @@
     "safari >= 10",
     "not dead"
   ],
-  "repository": "github:ahanapediatrics/react-s3-uploader",
+  "repository": "github:ahana-pediatrics/react-s3-uploader",
   "keywords": [
     "react",
     "upload",
@@ -33,9 +33,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ahanapediatrics/react-s3-uploader/issues"
+    "url": "https://github.com/ahana-pediatrics/react-s3-uploader/issues"
   },
-  "homepage": "https://github.com/ahanapediatrics/react-s3-uploader",
+  "homepage": "https://github.com/ahana-pediatrics/react-s3-uploader",
   "peerDependencies": {
     "react": ">=16.8.6",
     "react-dom": ">=16.8.6"
